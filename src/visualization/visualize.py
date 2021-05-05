@@ -3,6 +3,7 @@
 import logging
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -10,7 +11,7 @@ def main():
     logger = logging.getLogger(__name__)
     logger.info('Resampling climate data')
 
-    ifn = f'../../data/processed/climate_every_1hour.parquet'
+    ifn = f'../../data/processed/climate_1hour.parquet'
     if not os.path.isfile(ifn):
         raise Exception("There is no file {ifn}!")
     df = pd.read_parquet(ifn)
@@ -21,12 +22,13 @@ def main():
             raise Exception(f'There is no column: {coln_i}!')
 
     # plot data
-    ofn = '../../data/visualized/climate_resmapled.png'
+    df.fillna(0, inplace=True)
+    ofn = '../../data/visualized/climate_1hour.png'
     df[plot_coln_l].plot(subplots=True)
     plt.savefig(ofn)
     plt.close()
 
-    ofn = '../../data/visualized/climate_resmapled_first_480_hour.png'
+    ofn = '../../data/visualized/climate_1hour_first_480_hour.png'
     df[plot_coln_l].iloc[:480].plot(subplots=True)
     plt.savefig(ofn)
     plt.close()
